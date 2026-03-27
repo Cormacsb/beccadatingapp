@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Becca | DC</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #FAF9F6;
+            --card-bg: #FFFFFF;
+            --accent: #B8336A;
+            --accent-light: #F2D0DE;
+            --text-primary: #1A1A1A;
+            --text-secondary: #6B6B6B;
+            --text-muted: #9B9B9B;
+            --border: #E8E6E1;
+            --gradient-start: #B8336A;
+            --gradient-end: #C06C84;
+            --rose: #E8445A;
+            --shadow: 0 2px 20px rgba(0,0,0,0.06);
+            --shadow-hover: 0 8px 40px rgba(0,0,0,0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        /* Top bar */
+        .top-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: rgba(250, 249, 246, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .top-bar-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 20px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.5px;
+        }
+
+        /* Main container */
+        .container {
+            max-width: 440px;
+            margin: 0 auto;
+            padding: 72px 16px 120px;
+        }
+
+        /* Profile header */
+        .profile-header {
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            background: var(--card-bg);
+            box-shadow: var(--shadow);
+            margin-bottom: 16px;
+        }
+
+        .profile-photo {
+            width: 100%;
+            aspect-ratio: 3/4;
+            background: linear-gradient(135deg, #2C2C3A 0%, #1A1A2E 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .profile-photo-placeholder {
+            text-align: center;
+            color: rgba(255,255,255,0.5);
+            z-index: 2;
+        }
+
+        .profile-photo-placeholder .classified {
+            font-family: 'Inter', sans-serif;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.3);
+            margin-bottom: 16px;
+        }
+
+        .profile-photo-placeholder .icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+            opacity: 0.6;
+        }
+
+        .profile-photo-placeholder p {
+            font-size: 13px;
+            font-weight: 400;
+            color: rgba(255,255,255,0.35);
+            font-style: italic;
+        }
+
+        /* Decorative grid on photo */
+        .profile-photo::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px),
+                linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            z-index: 1;
+        }
+
+        .profile-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            inset: 0;
+            z-index: 2;
+        }
+
+        .profile-info-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 60px 24px 24px;
+            background: linear-gradient(transparent, rgba(0,0,0,0.7));
+            z-index: 3;
+        }
+
+        .profile-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 36px;
+            font-weight: 700;
+            color: white;
+            display: flex;
+            align-items: baseline;
+            gap: 12px;
+        }
+
+        .profile-age {
+            font-family: 'Inter', sans-serif;
+            font-size: 24px;
+            font-weight: 300;
+            color: rgba(255,255,255,0.85);
+        }
+
+        .profile-location {
+            color: rgba(255,255,255,0.7);
+            font-size: 14px;
+            font-weight: 400;
+            margin-top: 4px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Info pills */
+        .info-bar {
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            padding: 20px 24px;
+            margin-bottom: 16px;
+        }
+
+        .info-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+        }
+
+        .pill .pill-icon {
+            font-size: 14px;
+        }
+
+        .pill.highlight {
+            background: var(--accent-light);
+            border-color: transparent;
+            color: var(--accent);
+        }
+
+        /* Prompt cards */
+        .prompt-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            padding: 28px 24px;
+            margin-bottom: 16px;
+            position: relative;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .prompt-card:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .prompt-label {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--accent);
+            margin-bottom: 12px;
+        }
+
+        .prompt-answer {
+            font-family: 'Playfair Display', serif;
+            font-size: 22px;
+            font-weight: 400;
+            line-height: 1.5;
+            color: var(--text-primary);
+        }
+
+        .prompt-answer em {
+            font-style: italic;
+            color: var(--text-secondary);
+        }
+
+        .prompt-context {
+            margin-top: 14px;
+            padding-top: 14px;
+            border-top: 1px solid var(--border);
+            font-size: 13px;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        /* Like button on cards */
+        .card-like {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid var(--border);
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 16px;
+            color: var(--text-muted);
+        }
+
+        .card-like:hover {
+            border-color: var(--rose);
+            color: var(--rose);
+            transform: scale(1.1);
+        }
+
+        .card-like.liked {
+            background: var(--rose);
+            border-color: var(--rose);
+            color: white;
+            animation: likepop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes likepop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(1); }
+        }
+
+        /* Photo cards (between prompts) */
+        .photo-card {
+            border-radius: 16px;
+            overflow: hidden;
+            margin-bottom: 16px;
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+
+        .photo-card .photo-placeholder {
+            width: 100%;
+            aspect-ratio: 4/3;
+            background: linear-gradient(135deg, #E8E6E1 0%, #D4D0C8 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            font-size: 14px;
+            font-style: italic;
+        }
+
+        /* Quote card - different style */
+        .quote-card {
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            border-radius: 16px;
+            padding: 32px 28px;
+            margin-bottom: 16px;
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+
+        .quote-card .prompt-label {
+            color: rgba(255,255,255,0.6);
+        }
+
+        .quote-card .prompt-answer {
+            color: white;
+        }
+
+        .quote-card .prompt-context {
+            color: rgba(255,255,255,0.5);
+            border-top-color: rgba(255,255,255,0.15);
+        }
+
+        .quote-card .card-like {
+            border-color: rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.7);
+        }
+
+        .quote-card .card-like:hover {
+            border-color: white;
+            color: white;
+            background: rgba(255,255,255,0.2);
+        }
+
+        /* Vitals section */
+        .vitals-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            padding: 24px;
+            margin-bottom: 16px;
+        }
+
+        .vitals-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .vitals-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .vital-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .vital-label {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+        }
+
+        .vital-value {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        /* Bottom action bar */
+        .action-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: rgba(250, 249, 246, 0.9);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 1px solid var(--border);
+            padding: 16px 20px;
+            padding-bottom: max(16px, env(safe-area-inset-bottom));
+        }
+
+        .action-buttons {
+            max-width: 440px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .action-btn {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            border: 2px solid var(--border);
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 22px;
+        }
+
+        .action-btn:hover {
+            transform: scale(1.08);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .action-btn.pass {
+            color: #8B8B8B;
+        }
+
+        .action-btn.pass:hover {
+            border-color: #8B8B8B;
+        }
+
+        .action-btn.like {
+            color: var(--rose);
+            width: 64px;
+            height: 64px;
+            font-size: 26px;
+        }
+
+        .action-btn.like:hover {
+            border-color: var(--rose);
+            background: #FFF0F0;
+        }
+
+        .action-btn.rose {
+            color: var(--accent);
+        }
+
+        .action-btn.rose:hover {
+            border-color: var(--accent);
+            background: var(--accent-light);
+        }
+
+        /* Notification toast */
+        .toast {
+            position: fixed;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-20px);
+            background: var(--text-primary);
+            color: white;
+            padding: 14px 24px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            z-index: 200;
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* Match overlay */
+        .match-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.85);
+            z-index: 300;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .match-overlay.show {
+            display: flex;
+        }
+
+        .match-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 48px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--rose), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 16px;
+            animation: matchPop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .match-sub {
+            color: rgba(255,255,255,0.7);
+            font-size: 16px;
+            text-align: center;
+            max-width: 280px;
+            line-height: 1.5;
+        }
+
+        .match-dismiss {
+            margin-top: 32px;
+            padding: 14px 32px;
+            border-radius: 25px;
+            border: none;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            color: white;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .match-dismiss:hover {
+            transform: scale(1.05);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes matchPop {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .container {
+                padding: 64px 12px 110px;
+            }
+            .profile-name {
+                font-size: 30px;
+            }
+            .prompt-answer {
+                font-size: 20px;
+            }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 0;
+        }
+
+        /* Bike thief story card */
+        .story-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+
+        .story-header {
+            background: linear-gradient(135deg, #2C2C3A, #1A1A2E);
+            padding: 20px 24px;
+        }
+
+        .story-header .prompt-label {
+            color: rgba(255,255,255,0.5);
+        }
+
+        .story-header .prompt-answer {
+            color: white;
+            font-size: 19px;
+        }
+
+        .story-body {
+            padding: 20px 24px;
+        }
+
+        .story-body p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 8px;
+        }
+
+        .story-body p:last-child {
+            margin-bottom: 0;
+        }
+
+        .story-body .becca-quote {
+            font-weight: 500;
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="top-bar-logo">becca.dating</div>
+    </div>
+
+    <!-- Toast notification -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Match overlay -->
+    <div class="match-overlay" id="matchOverlay">
+        <div class="match-text">It's a match!</div>
+        <div class="match-sub">Becca probably thinks you're rude. She means it as a compliment.</div>
+        <button class="match-dismiss" onclick="dismissMatch()">Keep Scrolling</button>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+
+        <!-- Profile Header -->
+        <div class="profile-header">
+            <div class="profile-photo" id="profilePhoto">
+                <div class="profile-photo-placeholder">
+                    <div class="classified">CLASSIFIED</div>
+                    <div class="icon">&#128373;</div>
+                    <p>we're not traceable in my line of work</p>
+                </div>
+            </div>
+            <div class="profile-info-overlay">
+                <div class="profile-name">
+                    Becca <span class="profile-age">&#8203;</span>
+                </div>
+                <div class="profile-location">
+                    <span>&#128205;</span> Washington, DC
+                </div>
+            </div>
+        </div>
+
+        <!-- Info Pills -->
+        <div class="info-bar">
+            <div class="info-pills">
+                <span class="pill highlight"><span class="pill-icon">&#128188;</span> AI Policy</span>
+                <span class="pill"><span class="pill-icon">&#127968;</span> Communal house</span>
+                <span class="pill"><span class="pill-icon">&#127909;</span> Overly emotional pop</span>
+                <span class="pill"><span class="pill-icon">&#128690;</span> Bike thief survivor</span>
+                <span class="pill highlight"><span class="pill-icon">&#128220;</span> Possibly a lawyer</span>
+            </div>
+        </div>
+
+        <!-- Prompt 1 -->
+        <div class="prompt-card">
+            <div class="prompt-label">My therapist would say I</div>
+            <div class="prompt-answer">
+                Made this profile because I promised her I would make one. Maybe if you're smart and attuned enough you'll figure out why I find dating so hard.
+            </div>
+            <div class="card-like" onclick="toggleLike(this)">&#9829;</div>
+        </div>
+
+        <!-- Photo placeholder 1 -->
+        <div class="photo-card">
+            <div class="photo-placeholder">
+                <span>&#128247; photo goes here</span>
+            </div>
+        </div>
+
+        <!-- Prompt 2 -->
+        <div class="prompt-card">
+            <div class="prompt-label">The way to win me over is</div>
+            <div class="prompt-answer">
+                Be: off-script, not cached, real. If you promise to be who you actually are, in return I will be who I actually am!
+            </div>
+            <div class="card-like" onclick="toggleLike(this)">&#9829;</div>
+        </div>
+
+        <!-- Photo placeholder 2 -->
+        <div class="photo-card">
+            <div class="photo-placeholder">
+                <span>&#128247; photo goes here</span>
+            </div>
+        </div>
+
+        <!-- Prompt 3 -->
+        <div class="quote-card">
+            <div class="prompt-label">My love language is</div>
+            <div class="prompt-answer">
+                Obligation-based kissing. Desire has nothing to do with it&hellip; This is a rules-based system.
+            </div>
+            <div class="card-like" onclick="toggleLike(this)">&#9829;</div>
+        </div>
+
+        <!-- Photo placeholder 3 -->
+        <div class="photo-card">
+            <div class="photo-placeholder">
+                <span>&#128247; photo goes here</span>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div style="text-align: center; padding: 32px 0 16px; color: var(--text-muted); font-size: 12px;">
+            <p style="margin-bottom: 4px;">If you made it this far, that's <em>rude</em>.</p>
+            <p>Built with love and 7,270 lines of WhatsApp messages.</p>
+        </div>
+
+    </div>
+
+    <!-- Bottom Action Bar -->
+    <div class="action-bar">
+        <div class="action-buttons">
+            <button class="action-btn pass" onclick="showToast('Wow, rude.')" title="Pass">
+                &#10005;
+            </button>
+            <button class="action-btn like" onclick="triggerMatch()" title="Like">
+                &#9829;
+            </button>
+            <button class="action-btn rose" onclick="showToast('You sent Becca a rose! She\\'ll probably call it rude.')" title="Send Rose">
+                &#127801;
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Like button toggling
+        function toggleLike(el) {
+            el.classList.toggle('liked');
+            if (el.classList.contains('liked')) {
+                showToast('You liked Becca\u2019s prompt!');
+            }
+        }
+
+        // Toast notifications
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2000);
+        }
+
+        // Match overlay
+        let matchCount = 0;
+        function triggerMatch() {
+            matchCount++;
+            if (matchCount >= 2) {
+                document.getElementById('matchOverlay').classList.add('show');
+                matchCount = 0;
+            } else {
+                showToast('You liked Becca! Tap again if you\u2019re sure.');
+            }
+        }
+
+        function dismissMatch() {
+            document.getElementById('matchOverlay').classList.remove('show');
+        }
+
+        // Close match overlay on escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') dismissMatch();
+        });
+
+        // Subtle scroll animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.prompt-card, .quote-card, .story-card, .photo-card, .info-bar, .vitals-card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            observer.observe(card);
+        });
+    </script>
+
+</body>
+</html>
